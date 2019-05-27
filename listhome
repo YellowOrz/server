@@ -1,0 +1,9 @@
+#! /bin/bash
+cd /home
+for file in $(ls /home)
+do
+  if [ $file != "dataset" ]; then
+     a=`du -sh $file`
+     echo $a
+  fi 
+done

@@ -1,0 +1,58 @@
+#! /bin/bash
+# author: renhaofan
+# time: 19.4.14
+# Function: a script for manager
+
+function show 
+{
+  echo "Author: renhaofan"
+  echo "E-Mail: yqykrhf@163.com"
+  echo "Last Modified Time: 19.4.15"
+  echo "---------------------------"
+  echo
+  echo "112 Information And Utilization"
+  echo
+  echo -n "| " ;echo "0:List disk space all user used"
+  echo -n "| " ;echo "1:Dataset"
+  echo -n "| " ;echo "2:Anaconda3"
+  echo -n "| " ;echo "3:Matlab"
+  echo -n "| " ;echo "4:OpenCV"
+  echo -n "| " ;echo "5|q|Q:quit"
+  echo 
+  echo "---------------------------"
+  read -p "Input your choice please: " a
+  case "$a" in
+  0)
+    clear
+    showSpace ;;
+  1)
+    clear
+    showDataset ;;
+  2)
+    clear
+    showAna ;;
+  3)
+    clear
+    showMab ;;
+  4)
+    clear
+    showCV ;;
+  5|q|Q)
+    return -1 ;;
+  *)
+    information ;;
+  esac
+}
+
+function showSpace
+{
+  cd /home
+  for file in $(ls /home)
+  do
+    if [ $file != "dataset" ]; then
+       a=`du -sh $file`
+       echo $a
+    fi
+  done 
+}
+

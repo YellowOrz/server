@@ -1,0 +1,17 @@
+#! /bin/bash
+cd /home
+maxsize=$((1024*1024*50)) #20 G
+for file in $(ls /home)
+do
+  if [ $file != "dataset" ]; then
+     filesize=`du -s $file | awk '{print $1}'`
+     #echo -n $file
+     #echo -n "| "
+     #echo $filesize
+     if [ $filesize -gt $maxsize ]; then
+     	chown root $file
+	chgrp root $file
+	echo $file 
+     fi
+  fi 
+done

@@ -1,0 +1,337 @@
+#!/bin/bash 
+#author: renhaofan 
+#  
+
+
+function information 
+{ 
+  #echo with color:https://www.jianshu.com/p/d1b4f554e6f1
+  time=30 # wait time until no operation
+#  echo "---------------------------"
+  echo
+#  echo "       112 Information            "
+#  echo "     Read this carefully!!        "
+#  echo "    Input number to choose!       "
+  echo "     Author: renhaofan"
+  echo "    Email: yqykrhf@163.com"
+  echo ""
+  echo -e "\033[31m|-------------------------------|\033[0m"
+  echo -e "\033[31m|       112 Information         |\033[0m"
+  echo -e "\033[31m|     Read this carefully!!     |\033[0m"
+  echo -e "\033[31m|     Input number to choose!   |\033[0m"
+  echo -e "\033[31m|-------------------------------|\033[0m"
+
+  echo
+#  echo -n "    | " ;echo " 0:Info"
+#  echo -n "    | " ;echo " 1:Dataset"
+#  echo -n "    | " ;echo " 2:Anaconda3"
+#  echo -n "    | " ;echo " 3:Matlab"
+#  echo -n "    | " ;echo " 4:OpenCV"
+#  echo -n "    | " ;echo " 5|q|Q:quit"
+
+  echo -n "|" ;echo -n -e "\033[32m 0\033[0m";echo -n ":Info   "
+  echo -n "|" ;echo -n -e "\033[32m 1\033[0m";echo -n ":Dataset "
+  echo -n "|" ;echo -n -e "\033[32m 2\033[0m";echo -n ":Anaconda3 "
+  echo 
+  echo -n "|" ;echo -n -e "\033[32m 3\033[0m";echo -n ":Matlab "
+  echo -n "|" ;echo -n -e "\033[32m 4\033[0m";echo -n ":OpenCV  "
+  echo -n "|" ;echo -n -e "\033[32m 5\033[0m";
+  echo -n "|" ;echo -n -e "\033[32mQ\033[0m";
+  echo -n "|" ;echo -n -e "\033[32mq\033[0m";
+  echo -n "|" 
+  echo -n ":quit "
+  echo 
+#  echo "---------------------------"
+  # If no respondence within $time seconds, then exit
+  # This is a tradeoff for x2go client, i.e GUI logging
+  echo ""
+  read -p "Input your choice please: " -t $time a 
+  if [ ! -n "$a" ];then
+     clear
+     return -1 
+  fi
+  case "$a" in
+  0)
+    clear
+    showInfo ;;
+  1) 
+    clear
+    showDataset ;; 
+  2) 
+    clear
+    showAna ;; 
+  3) 
+    clear
+    showMab ;; 
+  4) 
+    clear
+    showCV ;; 
+  5|q|Q)
+    return -1 ;; 
+  *) 
+    information ;; 
+  esac 
+} 
+  
+function showInfo
+{
+  echo "---------------------------"
+  echo "     (0)112-Info           "
+  echo
+  echo -n "| " ;echo "0: GPU driver version"
+  echo -n "| " ;echo "1: CUDA version"
+  echo -n "| " ;echo "2: cudnn version"
+  echo -n "| " ;echo "3: CPU info"
+  echo -n "| " ;echo "4: GPU info"
+  echo -n "| " ;echo "5: GUI info"
+  echo -n "| " ;echo "6|b|B: back"
+  echo -n "| " ;echo "7|q|Q: quit"
+  echo
+  echo "---------------------------"
+  read -p "Input your choise please:" c
+  case "$c" in
+  0)
+    if [ -f "/proc/driver/nvidia/version" ]; then
+    	echo `cat /proc/driver/nvidia/version`
+	echo
+        echo "Input any Key to continure"
+    else
+	echo "The Nvidia driver is not installed yet, stupid manager."
+	echo
+	echo "Input any Key to continure"
+    fi
+    read -p "" -t 30 t
+    clear
+    showInfo ;;
+  1)
+    if [ -f "/usr/local/cuda/version.txt" ]; then
+	echo `cat /usr/local/cuda/version.txt`
+        echo "CUDA Driver = CUDART, CUDA Driver Version = 10.0, CUDA Runtime Version = 9.0, NumDevs = 4"
+	echo "Note: 'nivida-smi' CUDA Version 10.0 ---- Driver Version!!!!"
+        echo "Note: Runtime Version is the real version when you run program!!!! "
+        echo
+        echo "Input any Key to continure"
+    else
+	echo "/usr/local/cuda/version.txt not exists."
+	echo
+        echo "Input any Key to continure"
+    fi 
+    read -p "" -t 30 t
+    clear
+    showInfo ;;
+  2)
+    if [ -f "/usr/local/cuda/include/cudnn.h" ]; then
+	echo -n "`sed -n '57p' /usr/local/cuda/include/cudnn.h | tr -cd [0-9]`";echo -n "."
+	echo -n "`sed -n '58p' /usr/local/cuda/include/cudnn.h | tr -cd [0-9]`";echo -n "."   	
+	echo "`sed -n '59p' /usr/local/cuda/include/cudnn.h | tr -cd [0-9]`";
+	echo 
+        echo "Input any Key to continure"
+    else
+	echo "/usr/local/cuda/include/cudnn.h not exists"
+	echo
+        echo "Input any Key to continure"
+    fi
+    read -p "" -t 30 t
+    clear
+    showInfo ;;
+  3)
+    lscpu | grep Architecture -A 23
+    echo
+    echo "Input any Key to continure"
+    read -p "" -t 30 t
+    clear
+    showInfo ;;
+  4)
+    nvidia-smi 
+    echo
+    echo "Input any Key to continure"
+    read -p "" -t 30 t
+    clear
+    showInfo ;;
+  5)
+    echo
+    echo "You can use x2go to connect GUI"
+    echo "Install X2go client on your desktop"
+    echo "Choose 'XFCE' session type to connect"
+    echo
+    echo "Input any Key to continure"
+    read -p "" -t 30 t
+    clear
+    showInfo ;;
+  6|b|B)
+    clear 
+    information ;;
+  7|q|Q)
+    return -1 ;;
+  *)
+    clear
+    showInfo ;;
+  esac
+} 
+
+function showDataset
+{
+  echo "---------------------------"
+  echo "      (1)112-Dataset       "
+  echo
+  echo "       1. cityscaps"
+  echo "       2. nyuv2"
+  echo "       3. VOC2012"
+  echo "       4. VehicleID_V1.0"
+  echo "       5. ScanNetv2"
+  echo 
+  echo "  If you install big dataset" 
+  echo "       more than 100G, "
+  echo "       send email to" 
+  echo "      yqykrhf@163.com"
+  echo "All dataset located in /home/dataset"
+  echo
+  echo -n "| " ;echo "0|b|B: back"
+  echo -n "| " ;echo "1|q|Q: quit"
+  echo
+  echo "---------------------------"
+  read -p "Input your choise please:" c
+  case "$c" in 
+  0|b|B)
+    clear
+    information ;;
+  1|q|Q)
+    clear
+    return -1 ;;
+  *)
+    clear
+    showDataset ;;
+  esac  
+}
+
+function showAna
+{
+  echo "---------------------------"
+  echo "     (2)112-Anaconda3      "
+  echo 
+  echo "Some packages installed:"
+  echo "* tensorflow-1.9.0(GPU)"
+  echo "* pytorch-1.0.0(GPU)"
+  echo "* opencv-python (4.0.0.21)"
+  echo "* opencv-contrib-python (4.0.0.21)"
+  echo 
+  echo "--------------------------"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "Don't install anaconda3 in your own HOME folder."
+  echo "Note: You can create your envirment, if necessary."
+  echo 
+  echo -n "| " ;echo "0|b|B: back"
+  echo -n "| " ;echo "1|q|Q: quit"
+  echo
+  echo "---------------------------"
+  read -p "Input your choise please:" c
+  case "$c" in
+  0|b|B)
+    clear
+    information ;;
+  1|q|Q)
+    clear
+    return -1 ;;
+  *)
+    clear
+    showAna ;;
+  esac
+}
+
+function showMab
+{
+  echo "---------------------------"
+  echo "       (3)112-Matlab       "
+  echo "Make sure there is only one version in your ~/.bashrc!!!!"
+  echo -n "| " ;echo "4: use R2014a"
+  echo -n "| " ;echo "6: use R2016b"
+  echo -n "| " ;echo "8: use R2018a"
+  echo "---------------------------"
+  echo -n "| " ;echo "0|b|B:back"
+  echo -n "| " ;echo "1|q|Q:quit"
+  echo
+  echo "---------------------------"
+  read -p "Input your choise please:" c
+  case "$c" in
+  0|b|B)
+    clear
+    information ;;
+  1|q|Q)
+    clear
+    return -1 ;;
+  4)
+    echo 'export PATH="/usr/local/Matlab/R2014a/bin:$PATH"' >> ~/.bashrc;source ~/.bashrc
+    echo 
+    echo "Added R2014a to ~/.bashrc successfully"
+    echo "Input any Key to continue"    
+    echo 
+    read -p "" -t 30 r
+    clear
+    showMab ;;
+  6)
+    echo 'export PATH="/usr/local/Matlab/R2016b/bin:$PATH"' >> ~/.bashrc;source ~/.bashrc
+    echo 
+    echo "add R2016b to ~/.bashrc successfully, "
+    echo "Input any Key to continue"    
+    echo 
+    read -p "" -t 30 r
+    clear
+    showMab ;;
+  8)
+    echo 'export PATH="/usr/local/Matlab/R2018a/bin:$PATH"' >> ~/.bashrc;source ~/.bashrc
+    echo "add R2018a to ~/.bashrc successfully"
+    echo 
+    echo "Input any Key to continue"    
+    read -p "" -t 30 r
+    clear
+    showMab ;;
+  *)
+    clear
+    showMab ;;
+  esac
+}
+
+function showCV
+{
+  echo "---------------------------"
+  echo "      (4)112-OpenCV        "
+  echo "c++ Library:"
+  echo "* OpenCV2.4.9.1(default located in /usr/local/share)"
+  echo "* OpenCV3.4.1 + contrib3.4.1 (located in /usr/local/opencv343)"
+  echo "If you want to use 3.4.1version, add set(OpenCV_DIR /usr/local/opencv343/share/OpenCV to your CMakeLists.txt" 
+  echo 
+  echo "---------------------------"
+  echo -n "| " ;echo "0|b|B:back"
+  echo -n "| " ;echo "1|q|Q:quit"
+  echo
+  echo "---------------------------"
+  read -p "Input your choise please:" c
+  case "$c" in
+  0|b|B)
+    clear
+    information ;;
+  1|q|Q)
+    clear
+    exit 0 ;;
+  *)
+    clear
+    showCV ;;
+  esac
+}
+
+ProgressBar()
+{
+  local current=$1; local total=$2
+  local now=$((current*100/total))
+  local last=$(((current-1)*100/total))
+  [[ $((last % 2)) -eq 1 ]]&&let last++
+  local str=$(for i in `seq 1 $((last/2))`; do printf '#'; done)
+  for ((i=$last;$i<=$now;i+=2));do printf "\r[%-50s]%d%%" "$str"  $i;sleep 0.01;str+='#';done
+}
+clear
+for n in `seq 1 100`
+  do
+  ProgressBar $n 100
+  done
+clear
+information

@@ -1,0 +1,31 @@
+LAST MODIFIED TIME: 19.4.2
+AUTHOR: renhaofan
+E-MAIL: yqykrhf@163.com
+###################################################################
+###############      Read this file carefully     #################
+###############   If logging in at the first time #################
+###################################################################
+-------------------------------------------------------------------
+	       Here are some package/libraries/dataset installed
+-------------------------------------------------------------------
+
+########  dataset installed(located in /home/dataset)
+	1. cityscapes
+	2. nyuv2
+#########   anaconda3  ########
+	* pytorch-0.4.1(GPU)
+	* opencv-python (4.0.0.21) 
+	* opencv-contrib-python (4.0.0.21) 
+	run `conda list` show more infomation
+#########    Matlab  #########
+	* R2016b
+using:
+run `echo 'export PATH="/usr/local/Matlab/R2016b/bin:$PATH"' >> ~/.bashrc` 
+    `source ~/.bashrc`
+#########  c++ Library ###########
+	* OpenCV2.4.9.1(default)
+	* OpenCV3.4.1 + contrib3.4.1 (located in /usr/local/opencv343)
+
+Note: the CMakeLists.txt in two opencv versions can be got by asking renhaofan 
+
+

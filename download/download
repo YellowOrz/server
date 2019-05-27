@@ -1,0 +1,98 @@
+# /bin/bash
+# added by renhaofan on 19.4.2, tested on ubuntu-server16.04
+# download and install some packages 
+
+# download path
+anaconda3=https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-5.0.0-Linux-x86_64.sh
+NvidiaDriver=http://us.download.nvidia.com/XFree86/Linux-x86_64/410.93/NVIDIA-Linux-x86_64-410.93.run
+cuda90=https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run
+#-----------------------------
+
+sudo apt-get install rar unzip
+
+# --------------------------------------------------------------------------
+############   nvidia driver410.93    ################
+apt install locales-all
+wget  $NvidiaDriver
+chmod u+x NVIDIA-Linux-x86_64-410.93.run
+./NVIDIA-Linux-x86_64-410.93.run
+reboot
+rm -rf NVIDIA-Linux-x86_64-410.93.run
+nvidia-smi
+# nvcc complier
+apt install nvidia-cuda-toolkit
+
+#
+############ 1. anaconda3 python==3.6 ################
+wget -P /opt $anaconda3 
+# wait 3 seconds 
+ti1=`date +%s`    
+ti2=`date +%s`
+i=$(($ti2 - $ti1 ))
+while [[ "$i" -ne "3" ]]
+do
+	ti2=`date +%s`
+	i=$(($ti2 - $ti1 ))
+done
+
+bash /opt/Anaconda3-5.0.0-Linux-x86_64.sh
+rm -rf /opt/Anaconda3-5.0.0-Linux-x86_64.sh
+# added to  system envirment
+echo '# added by Anaconda3 installer' >> /etc/profile
+echo 'export PATH="/opt/anaconda3/bin:$PATH"' >> /etc/profile
+source /etc/profile
+# add some third-party source
+# cited: https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/menpo/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+########### pytorch 0.4.1 ####################
+conda install pytorch==0.4.1 torchvision cuda90
+
+# update all packages
+# $ conda update --all
+# $ conda create -n my_root --clone="/opt/anaconda3"
+# conda search cudnn
+########### 2. matlab #########################
+mkdir /usr/local/Matlab
+mkdir /usr/local/Matlab/R2018a/install
+mkdir /usr/local/Matlab/R2016b/install
+mkdir /usr/local/Matlab/R2014a/install
+
+
+# matlab2016
+cd ../../package/Matlab/R2016b/16b_install/
+mv * /usr/local/Matlab/R2016b/install
+cd ..
+mkdir /iso
+mount -o loop ../../package/Matlab/R2016b/R2016b_glnxa64_dvd1.iso /iso
+/iso/install -inputFile /usr/local/Matlab/R2016b/install/installer_input.txt
+
+# wati until appear info "Eject DVD 1 and insert DVD 2 to continue"
+# open a new terminate
+umount /iso
+mount -t auto -O loop R2016b_glnxa64_dvd2.iso /iso
+# activate
+cp *.so* /usr/local/Matlab/R2016b/bin/glnxa64/
+# test activate
+/usr/local/Matlab/R2016b/bin/activate_matlab.sh -propertiesFile /usr/local/Matlab/R2016b/install/activate.ini
+# matlab -nodesktop -nodisplay
+rm -rf /iso
+
+# 2014a
+cd ../../package/Matlab/R2014a/14a_install/
+cp * /usr/local/Matlab/R2014a/install
+
+mkdir /iso
+mount -o loop ../../package/Matlab/R2014a/MATHWORKS_R2014A.iso /iso
+/iso/install -inputFile /usr/local/Matlab/R2014a/install/installer_input.txt
+# activate
+cp ../../package/Matlab/R2014a/Crack/libmwservices.so /usr/local/Matlab/R2014a/bin/glnxa64
+# test activate
+/usr/local/Matlab/R2014a/bin/activate_matlab.sh -propertiesFile /usr/local/Matlab/R2014a/install/activate.ini
+
+# 2018a
+
+
