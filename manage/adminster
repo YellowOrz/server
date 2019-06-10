@@ -1,0 +1,96 @@
+#! /bin/bash
+# author: renhaofan
+# for adminster to manage the server
+
+function interface
+{
+  echo
+  echo "     Author: renhaofan"
+  echo "    Email: yqykrhf@163.com"
+  echo ""
+  echo -e "\033[31m|----------------------------------------|\033[0m"
+  echo -e "\033[31m|        112 management interface        |\033[0m"
+  echo -e "\033[31m|        Input number to choose!         |\033[0m"
+  echo -e "\033[31m|----------------------------------------|\033[0m"
+  echo
+  echo ""
+  echo -n "|" ;echo -n -e "\033[32m 0\033[0m";echo -n ":addUser   "
+  echo -n "|" ;echo -n -e "\033[32m 1\033[0m";echo -n ":delUser "
+  echo -n "|" ;echo -n -e "\033[32m 2\033[0m";echo -n ":showSudoUeer "
+  echo 
+  echo -n "|" ;echo -n -e "\033[32m 3\033[0m";echo -n ":delSudoUser "
+  echo -n "|" ;echo -n -e "\033[32m 4\033[0m";echo -n ":OpenCV  "
+  echo -n "|" ;echo -n -e "\033[32m 5\033[0m";
+  echo -n "|" ;echo -n -e "\033[32mQ\033[0m";
+  echo -n "|" ;echo -n -e "\033[32mq\033[0m";
+  echo -n "|" 
+  echo -n ":quit "
+  
+  read -p "Input your choice please: " a
+  if [ ! -n "$a" ];then
+     clear
+     return -1
+  fi
+  case "$a" in
+  0)
+    clear
+    addUser ;;
+  1)
+    clear
+    delUser ;;
+  2)
+    clear
+    showSudoUser ;;
+  3)
+    clear
+    delSudoUser ;;
+  4)
+    clear
+    showCV ;;
+  5|q|Q)
+    return -1 ;;
+  *)
+    interface ;;
+  esac
+}
+
+function addUser
+{
+  read -p "Input the new uesrname: " username
+  # check whether username exists
+  if id -u $username >/dev/null 2>&1; then
+      echo "Error: "$username"  exists"
+  else
+      #echo $username"  does not exist "
+      sudo adduser $username
+  fi
+  # check whether adduser successfully
+  if [ -e "/home/"$username"/.bashrc" -a -d "/home/"$username ]; then
+    echo "add "$username" successfully"
+  else
+    echo "Error,failed to add "$username
+  fi 
+}
+
+function delUser
+{
+  
+}
+
+
+
+# debug
+# createUser
+#read -p "Input the new uesrname: " username
+#echo "/home/"$username
+#if [ -e "/home/"$username"/.bashrc" -a -d "/home/"$username ]; then
+#    echo "/home/"$username" is a folder"
+#else
+#    echo "/home/"$username" is not a folder" 
+#fi
+
+
+
+
+
+
